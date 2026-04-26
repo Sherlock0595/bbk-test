@@ -43,10 +43,9 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
 </script>
 
 <template>
-  <div>
+  <div :style="{ marginLeft }">
     <div v-for="[id, node] of root" :key="id">
       <bbk-tree-node
-        :style="{ marginLeft }"
         :node="node"
         :checked="selectedNodes.has(node.id)"
         @open-node="(node) => (node.hasChildren ? emitOpenNode(node) : emitExpandNode(node))"
@@ -61,9 +60,9 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
         leave-to-class="transform opacity-0"
       >
         <template v-if="expandedNodes.has(node.id)">
-          <div v-if="loadingNodes.has(node.id)" :style="{ marginLeft }">Загрузка дочерних элементов...</div>
+          <div v-if="loadingNodes.has(node.id)">Загрузка дочерних элементов...</div>
 
-          <div v-else-if="(children.get(node.id)?.size ?? 0) == 0" :style="{ marginLeft }">Нет дочерних элементов</div>
+          <div v-else-if="(children.get(node.id)?.size ?? 0) == 0">Нет дочерних элементов</div>
 
           <bbk-tree
             v-else
