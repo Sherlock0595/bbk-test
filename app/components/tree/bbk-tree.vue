@@ -19,23 +19,26 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (e: 'load-children' | 'expand-node' | 'collapse-node' | 'check-node', id: BbkRootRecordType[number]['id']): void;
-  (e: 'update-breadcrumb', breadcrumbs: Set<string>): void;
+  (e: 'push-breadcrumb', breadcrumbs: BbkRootRecordType[number][]): void;
 }>();
 
 const marginLeft = `${props.level * 30}px`;
 
-const expandNode = (id: BbkRootRecordType[number]['id']) => {
-  if (props.expandedNodes.has(id)) {
-    emit('collapse-node', id);
+const emitExpandNode = (node: BbkRootRecordType[number]) => {
+  emit('push-breadcrumb', [node]);
+
+  if (props.expandedNodes.has(node.id)) {
+    emit('collapse-node', node.id);
   } else {
-    emit('expand-node', id);
+    emit('expand-node', node.id);
   }
 };
 
-const openNode = (id: BbkRootRecordType[number]['id']) => {
-  emit('load-children', id);
+const emitOpenNode = (node: BbkRootRecordType[number]) => {
+  emit('load-children', node.id);
+  emit('push-breadcrumb', [node]);
 
-  expandNode(id);
+  emitExpandNode(node);
 };
 </script>
 
@@ -44,12 +47,10 @@ const openNode = (id: BbkRootRecordType[number]['id']) => {
     <div v-for="[id, node] of root" :key="id">
       <bbk-tree-node
         :style="{ marginLeft }"
-        :id="node.id"
-        :code="node.code"
-        :title="node.title"
+        :node="node"
         :checked="selectedNodes.has(node.id)"
-        @open-node="(id) => (node.hasChildren ? openNode(id) : expandNode(id))"
-        @check-node="(id) => emit('check-node', id)"
+        @open-node="(node) => (node.hasChildren ? emitOpenNode(node) : emitExpandNode(node))"
+        @check-node="(node) => emit('check-node', node.id)"
       />
 
       <template v-if="expandedNodes.has(node.id)">
@@ -64,7 +65,14 @@ const openNode = (id: BbkRootRecordType[number]['id']) => {
           @expand-node="(id) => emit('expand-node', id)"
           @collapse-node="(id) => emit('collapse-node', id)"
           @check-node="(id) => emit('check-node', id)"
+          @push-breadcrumb="
+            (breadcrumbs) => {
+              breadcrumbs.push(node);
+              emit('push-breadcrumb', breadcrumbs);
+            }
+          "
         />
+
         <bbk-details v-else :style="{ marginLeft }" :node="node" />
       </template>
     </div>
