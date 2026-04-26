@@ -20,6 +20,7 @@ const props = withDefaults(
 const emit = defineEmits<{
   (e: 'load-children' | 'expand-node' | 'collapse-node' | 'check-node', id: BbkRootRecordType[number]['id']): void;
   (e: 'push-breadcrumb', breadcrumbs: BbkRootRecordType[number][]): void;
+  (e: 'show-detail', node: BbkRootRecordType[number]): void;
 }>();
 
 const marginLeft = `${props.level * 30}px`;
@@ -31,6 +32,7 @@ const emitExpandNode = (node: BbkRootRecordType[number]) => {
     emit('collapse-node', node.id);
   } else {
     emit('expand-node', node.id);
+    emit('show-detail', node);
   }
 };
 
@@ -76,6 +78,7 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
             @expand-node="(id) => emit('expand-node', id)"
             @collapse-node="(id) => emit('collapse-node', id)"
             @check-node="(id) => emit('check-node', id)"
+            @show-detail="(node) => emit('show-detail', node)"
             @push-breadcrumb="
               (breadcrumbs) => {
                 breadcrumbs.push(node);
