@@ -1,4 +1,5 @@
-import type { BbkRootRecordType } from '~~/api/bbk-service/requests/bbk-root-validator';
+import type { BbkRootRecordType } from '@api/bbk-service/requests/bbk-root-validator';
+import type { BbkChildrenRecordMapType, BbkRecordMapType } from '~/types';
 import { useBbkClient } from '@api/bbk-service/client';
 import { parse, stringify } from 'zipson';
 
@@ -7,11 +8,31 @@ export const useBbkStore = defineStore(
   () => {
     const bbkClient = useBbkClient();
 
-    const nodes = ref<Map<BbkRootRecordType[number]['id'], BbkRootRecordType[number]>>(new Map());
-    const nodeChildren = ref<Map<BbkRootRecordType[number]['id'], typeof nodes.value>>(new Map());
+    const nodes = ref<BbkRecordMapType>(new Map());
+    const nodeChildren = ref<BbkChildrenRecordMapType>(new Map());
+    const expandedNodes = ref<Set<string>>(new Set());
+    const selectedNodes = ref<Set<string>>(new Set());
 
     const getNodes = computed(() => nodes.value);
     const getNodeChildren = computed(() => nodeChildren.value);
+    const getExpandedNodes = computed(() => expandedNodes.value);
+    const getSelectedNodes = computed(() => selectedNodes.value);
+
+    const expandNode = (id: BbkRootRecordType[number]['id']) => {
+      expandedNodes.value.add(id);
+    };
+
+    const collapseNode = (id: BbkRootRecordType[number]['id']) => {
+      expandedNodes.value.delete(id);
+    };
+
+    const toggleSelectedNode = (id: BbkRootRecordType[number]['id']) => {
+      if (selectedNodes.value.has(id)) {
+        selectedNodes.value.delete(id);
+      } else {
+        selectedNodes.value.add(id);
+      }
+    };
 
     const loadRootNodes = async () => {
       const response = await bbkClient.getRoot();
@@ -25,6 +46,8 @@ export const useBbkStore = defineStore(
     };
 
     const loadNodeChildren = async (id: BbkRootRecordType[number]['id']) => {
+      if (nodeChildren.value.has(id)) return;
+
       const response = await bbkClient.getChildren(id);
 
       if (!response.success) {
@@ -32,9 +55,8 @@ export const useBbkStore = defineStore(
         return;
       }
 
-      // FIXME: отрефакторить сделать в одну строчку
-      const children = new Map();
-      response.data.forEach((node) => children.set(id, node));
+      const children: BbkRecordMapType = new Map();
+      response.data.forEach((node) => children.set(node.id, node));
 
       nodeChildren.value.set(id, children);
     };
@@ -42,8 +64,14 @@ export const useBbkStore = defineStore(
     return {
       getNodes,
       getNodeChildren,
+      getExpandedNodes,
+      getSelectedNodes,
+
       loadRootNodes,
       loadNodeChildren,
+      toggleSelectedNode,
+      expandNode,
+      collapseNode,
     };
   },
   {
