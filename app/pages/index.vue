@@ -8,14 +8,20 @@ await bbkStore.loadRootNodes();
 </script>
 
 <template>
-  <bbk-tree
-    :root="bbkStore.getNodes"
-    :children="bbkStore.getNodeChildren"
-    :expanded-nodes="bbkStore.getExpandedNodes"
-    :selected-nodes="bbkStore.getSelectedNodes"
-    @load-children="(id) => bbkStore.loadNodeChildren(id)"
-    @expand-node="(id) => bbkStore.expandNode(id)"
-    @collapse-node="(id) => bbkStore.collapseNode(id)"
-    @select-node="(id) => bbkStore.toggleSelectedNode(id)"
-  />
+  <div>
+    <bbk-tree
+      :root="bbkStore.getNodes"
+      :children="bbkStore.getNodeChildren"
+      :expanded-nodes="bbkStore.getExpandedNodes"
+      :selected-nodes="bbkStore.getSelectedNodes"
+      @load-children="(id) => bbkStore.loadNodeChildren(id)"
+      @expand-node="(id) => bbkStore.expandNode(id)"
+      @collapse-node="(id) => bbkStore.collapseNode(id)"
+      @select-node="(id) => bbkStore.toggleSelectedNode(id)"
+    />
+
+    <div class="mt-12">
+      {{ bbkStore.getSelectedNodes }}
+    </div>
+  </div>
 </template>

@@ -50,8 +50,8 @@ const openNode = (id: BbkRootRecordType[number]['id']) => {
         :code="node.code"
         :title="node.title"
         :checked="selectedNodes.has(node.id)"
-        @open-node="node.hasChildren ? openNode(node.id) : expandNode(node.id)"
-        @select-node="emit('select-node', node.id)"
+        @open-node="(id) => (node.hasChildren ? openNode(id) : expandNode(id))"
+        @select-node="(id) => emit('select-node', id)"
       />
 
       <template v-if="expandedNodes.has(node.id)">
@@ -65,7 +65,7 @@ const openNode = (id: BbkRootRecordType[number]['id']) => {
           @load-children="(id) => emit('load-children', id)"
           @expand-node="(id) => emit('expand-node', id)"
           @collapse-node="(id) => emit('collapse-node', id)"
-          @select-node="emit('select-node', node.id)"
+          @select-node="(id) => emit('select-node', id)"
         />
         <bbk-details v-else :style="{ marginLeft }" :node="node" />
       </template>
