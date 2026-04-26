@@ -17,7 +17,7 @@ await bbkStore.loadRootNodes();
       @load-children="(id) => bbkStore.loadNodeChildren(id)"
       @expand-node="(id) => bbkStore.expandNode(id)"
       @collapse-node="(id) => bbkStore.collapseNode(id)"
-      @select-node="(id) => bbkStore.toggleSelectedNode(id)"
+      @check-node="(id) => bbkStore.toggleSelectedNode(id)"
     />
 
     <div class="mt-12">

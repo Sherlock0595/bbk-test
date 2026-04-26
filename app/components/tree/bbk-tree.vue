@@ -18,10 +18,8 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (
-    e: 'load-children' | 'expand-node' | 'collapse-node' | 'select-node',
-    parentId: BbkRootRecordType[number]['id'],
-  ): void;
+  (e: 'load-children' | 'expand-node' | 'collapse-node' | 'check-node', id: BbkRootRecordType[number]['id']): void;
+  (e: 'update-breadcrumb', breadcrumbs: Set<string>): void;
 }>();
 
 const marginLeft = `${props.level * 30}px`;
@@ -51,7 +49,7 @@ const openNode = (id: BbkRootRecordType[number]['id']) => {
         :title="node.title"
         :checked="selectedNodes.has(node.id)"
         @open-node="(id) => (node.hasChildren ? openNode(id) : expandNode(id))"
-        @select-node="(id) => emit('select-node', id)"
+        @check-node="(id) => emit('check-node', id)"
       />
 
       <template v-if="expandedNodes.has(node.id)">
@@ -65,7 +63,7 @@ const openNode = (id: BbkRootRecordType[number]['id']) => {
           @load-children="(id) => emit('load-children', id)"
           @expand-node="(id) => emit('expand-node', id)"
           @collapse-node="(id) => emit('collapse-node', id)"
-          @select-node="(id) => emit('select-node', id)"
+          @check-node="(id) => emit('check-node', id)"
         />
         <bbk-details v-else :style="{ marginLeft }" :node="node" />
       </template>
