@@ -53,6 +53,7 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
         @open-node="(node) => (node.hasChildren ? emitOpenNode(node) : emitExpandNode(node))"
         @check-node="(node) => emit('check-node', node.id)"
       />
+
       <transition
         enter-active-class="duration-300 ease-out"
         enter-from-class="transform opacity-0"
