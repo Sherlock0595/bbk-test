@@ -1,25 +1,22 @@
 <script setup lang="ts">
-import type { BbkRootRecordType } from '~~/api/bbk-service/requests/bbk-root';
-import { useBbkClient } from '@api/bbk-service/client';
+import { useBbkStore } from '@/stores/bbk-store';
 
-const bbkClient = useBbkClient();
+const bbkStore = useBbkStore();
 
-const data = ref<BbkRootRecordType>([]);
+await bbkStore.loadRootNodes();
 
-async function click() {
-  const response = await bbkClient.getRoot();
-
-  if (response.success) {
-    data.value = response.output;
-  }
+async function loadChildren(id: string) {
+  await bbkStore.loadNodeChildren(id);
 }
-
-const res0 = useFetch('/api/v1/bbk/root', { method: 'GET', lazy: true });
 </script>
 
 <template>
   <div>
-    <code>{{ res0.data }}</code>
-    <div @click="click">loading: {{ data }}</div>
+    <div v-for="[id, node] in bbkStore.getNodes" :key="id">
+      <div @click="loadChildren(id)">{{ node }}</div>
+      <div>
+        {{ bbkStore.getNodeChildren.get(id) }}
+      </div>
+    </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 import type { ApiResponse } from '@/types';
-import type { BbkRootRecordType } from '@api/bbk-service/requests/bbk-root';
+import type { BbkRootRecordType } from '@api/bbk-service/requests/bbk-root-validator';
 
 export const useHttpClient = () => {
   return {

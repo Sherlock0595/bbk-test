@@ -1,12 +1,12 @@
 import { faker } from '@faker-js/faker';
 
 export default defineEventHandler(async () => {
-  function sleep(ms: number) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  }
-  await sleep(2500);
+  // function sleep(ms: number) {
+  //   return new Promise((resolve) => {
+  //     setTimeout(resolve, ms);
+  //   });
+  // }
+  // await sleep(2500);
 
   return {
     data: Array.from({ length: 10 }, () => ({
