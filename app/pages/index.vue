@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { BbkRootRecordType } from '~~/api/bbk-service/requests/bbk-root-validator';
+import type { BreadcrumbType } from '~/types';
 import BbkTree from '~/components/tree/bbk-tree.vue';
 import Breadcrumbs from '~/components/breadcrumbs/breadcrumbs.vue';
 import { useBbkStore } from '@/stores/bbk-store';
-import type { BreadcrumbType } from '~/types';
 
 const bbkStore = useBbkStore();
 
@@ -30,6 +30,7 @@ const getPushedBreadcrumbs = computed<BreadcrumbType[]>(() =>
       :children="bbkStore.getNodeChildren"
       :expanded-nodes="bbkStore.getExpandedNodes"
       :selected-nodes="bbkStore.getSelectedNodes"
+      :loading-nodes="bbkStore.getLoadingNodes"
       @load-children="(id) => bbkStore.loadNodeChildren(id)"
       @expand-node="(id) => bbkStore.expandNode(id)"
       @collapse-node="(id) => bbkStore.collapseNode(id)"

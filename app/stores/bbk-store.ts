@@ -10,13 +10,15 @@ export const useBbkStore = defineStore(
 
     const nodes = ref<BbkRecordMapType>(new Map());
     const nodeChildren = ref<BbkChildrenRecordMapType>(new Map());
-    const expandedNodes = ref<Set<string>>(new Set());
-    const selectedNodes = ref<Set<string>>(new Set());
+    const expandedNodes = ref<Set<BbkRootRecordType[number]['id']>>(new Set());
+    const selectedNodes = ref<Set<BbkRootRecordType[number]['id']>>(new Set());
+    const loadingNodes = ref<Set<BbkRootRecordType[number]['id']>>(new Set());
 
     const getNodes = computed(() => nodes.value);
     const getNodeChildren = computed(() => nodeChildren.value);
     const getExpandedNodes = computed(() => expandedNodes.value);
     const getSelectedNodes = computed(() => selectedNodes.value);
+    const getLoadingNodes = computed(() => loadingNodes.value);
 
     const expandNode = (id: BbkRootRecordType[number]['id']) => {
       expandedNodes.value.add(id);
@@ -48,7 +50,11 @@ export const useBbkStore = defineStore(
     const loadNodeChildren = async (id: BbkRootRecordType[number]['id']) => {
       if (nodeChildren.value.has(id)) return;
 
+      loadingNodes.value.add(id);
+
       const response = await bbkClient.getChildren(id);
+
+      loadingNodes.value.delete(id);
 
       if (!response.success) {
         console.error(response);
@@ -66,6 +72,7 @@ export const useBbkStore = defineStore(
       getNodeChildren,
       getExpandedNodes,
       getSelectedNodes,
+      getLoadingNodes,
 
       loadRootNodes,
       loadNodeChildren,

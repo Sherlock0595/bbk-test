@@ -8,7 +8,7 @@ export default defineEventHandler(async () => {
   }
   await sleep(2500);
 
-  const length = faker.number.int({ min: 0, max: 5 });
+  const length = faker.number.int({ min: 0, max: 3 });
 
   return Array.from({ length }, () => ({
     id: faker.string.uuid(),

@@ -7,5 +7,5 @@ defineProps<{
 </script>
 
 <template>
-  <div>{{ node.code }}</div>
+  <div>код: {{ node.code }}</div>
 </template>

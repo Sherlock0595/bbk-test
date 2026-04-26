@@ -2,7 +2,6 @@
 import type { BbkChildrenRecordMapType, BbkRecordMapType } from '~/types';
 import type { BbkRootRecordType } from '~~/api/bbk-service/requests/bbk-root-validator';
 import BbkTreeNode from '~/components/tree/bbk-tree-node.vue';
-import BbkDetails from '~/components/tree/bbk-details.vue';
 
 const props = withDefaults(
   defineProps<{
@@ -11,6 +10,7 @@ const props = withDefaults(
     level?: number;
     expandedNodes: Set<BbkRootRecordType[number]['id']>;
     selectedNodes: Set<BbkRootRecordType[number]['id']>;
+    loadingNodes: Set<BbkRootRecordType[number]['id']>;
   }>(),
   {
     level: 0,
@@ -52,7 +52,6 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
         @open-node="(node) => (node.hasChildren ? emitOpenNode(node) : emitExpandNode(node))"
         @check-node="(node) => emit('check-node', node.id)"
       />
-
       <transition
         enter-active-class="duration-300 ease-out"
         enter-from-class="transform opacity-0"
@@ -62,13 +61,18 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
         leave-to-class="transform opacity-0"
       >
         <template v-if="expandedNodes.has(node.id)">
+          <div v-if="loadingNodes.has(node.id)" :style="{ marginLeft }">Загрузка дочерних элементов...</div>
+
+          <div v-else-if="(children.get(node.id)?.size ?? 0) == 0" :style="{ marginLeft }">Нет дочерних элементов</div>
+
           <bbk-tree
-            v-if="node.hasChildren"
+            v-else
             :root="children.get(node.id) ?? new Map()"
             :children="children"
             :level="level + 1"
             :expanded-nodes="expandedNodes"
             :selected-nodes="selectedNodes"
+            :loading-nodes="loadingNodes"
             @load-children="(id) => emit('load-children', id)"
             @expand-node="(id) => emit('expand-node', id)"
             @collapse-node="(id) => emit('collapse-node', id)"
@@ -80,8 +84,6 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
               }
             "
           />
-
-          <bbk-details v-else :style="{ marginLeft }" :node="node" />
         </template>
       </transition>
     </div>
