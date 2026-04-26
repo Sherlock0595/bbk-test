@@ -53,28 +53,37 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
         @check-node="(node) => emit('check-node', node.id)"
       />
 
-      <template v-if="expandedNodes.has(node.id)">
-        <bbk-tree
-          v-if="node.hasChildren"
-          :root="children.get(node.id) ?? new Map()"
-          :children="children"
-          :level="level + 1"
-          :expanded-nodes="expandedNodes"
-          :selected-nodes="selectedNodes"
-          @load-children="(id) => emit('load-children', id)"
-          @expand-node="(id) => emit('expand-node', id)"
-          @collapse-node="(id) => emit('collapse-node', id)"
-          @check-node="(id) => emit('check-node', id)"
-          @push-breadcrumb="
-            (breadcrumbs) => {
-              breadcrumbs.push(node);
-              emit('push-breadcrumb', breadcrumbs);
-            }
-          "
-        />
+      <transition
+        enter-active-class="duration-300 ease-out"
+        enter-from-class="transform opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="duration-200 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="transform opacity-0"
+      >
+        <template v-if="expandedNodes.has(node.id)">
+          <bbk-tree
+            v-if="node.hasChildren"
+            :root="children.get(node.id) ?? new Map()"
+            :children="children"
+            :level="level + 1"
+            :expanded-nodes="expandedNodes"
+            :selected-nodes="selectedNodes"
+            @load-children="(id) => emit('load-children', id)"
+            @expand-node="(id) => emit('expand-node', id)"
+            @collapse-node="(id) => emit('collapse-node', id)"
+            @check-node="(id) => emit('check-node', id)"
+            @push-breadcrumb="
+              (breadcrumbs) => {
+                breadcrumbs.push(node);
+                emit('push-breadcrumb', breadcrumbs);
+              }
+            "
+          />
 
-        <bbk-details v-else :style="{ marginLeft }" :node="node" />
-      </template>
+          <bbk-details v-else :style="{ marginLeft }" :node="node" />
+        </template>
+      </transition>
     </div>
   </div>
 </template>
