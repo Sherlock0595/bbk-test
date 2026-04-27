@@ -7,6 +7,10 @@ defineProps<{
   node: BbkRootRecordType[number];
   breadcrumbs: BreadcrumbType[];
 }>();
+
+const emit = defineEmits<{
+  (e: 'select-breadcrumb', nodeId: string): void;
+}>();
 </script>
 
 <template>
@@ -19,7 +23,7 @@ defineProps<{
       <div>
         <p class="text-xs font-semibold text-slate-600 uppercase tracking-wide mb-2">Путь</p>
         <div class="bg-slate-50 rounded px-3 py-2">
-          <breadcrumbs :breadcrumbs="breadcrumbs" />
+          <breadcrumbs :breadcrumbs="breadcrumbs" @select-breadcrumb="(nodeId) => emit('select-breadcrumb', nodeId)" />
         </div>
       </div>
 

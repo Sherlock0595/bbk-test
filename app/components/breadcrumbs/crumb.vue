@@ -6,7 +6,7 @@ defineProps<{
 }>();
 
 defineEmits<{
-  (e: 'eat-crumb', anchorId: string): void;
+  (e: 'eat-crumb' | 'select', anchorId: string): void;
 }>();
 </script>
 
@@ -14,8 +14,8 @@ defineEmits<{
   <div class="flex items-center gap-1">
     <a
       :href="`#${anchorId}`"
-      @click="$emit('eat-crumb', anchorId)"
-      class="text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors font-medium truncate"
+      @click.prevent="$emit('select', anchorId)"
+      class="text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors font-medium truncate hover:font-bold"
     >
       {{ label }}
     </a>

@@ -11,6 +11,7 @@ const props = withDefaults(
     expandedNodes: Set<BbkRootRecordType[number]['id']>;
     selectedNodes: Set<BbkRootRecordType[number]['id']>;
     loadingNodes: Set<BbkRootRecordType[number]['id']>;
+    highlightedNode?: BbkRootRecordType[number]['id'];
   }>(),
   {
     level: 0,
@@ -50,6 +51,7 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
       <bbk-tree-node
         :node="node"
         :checked="selectedNodes.has(node.id)"
+        :is-highlighted="highlightedNode === node.id"
         @open-node="(node) => (node.hasChildren ? emitOpenNode(node) : emitExpandNode(node))"
         @check-node="(node) => emit('check-node', node.id)"
       />
@@ -79,6 +81,7 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
             :expanded-nodes="expandedNodes"
             :selected-nodes="selectedNodes"
             :loading-nodes="loadingNodes"
+            :highlightedNode="highlightedNode"
             @load-children="(id) => emit('load-children', id)"
             @expand-node="(id) => emit('expand-node', id)"
             @collapse-node="(id) => emit('collapse-node', id)"

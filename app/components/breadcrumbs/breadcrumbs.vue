@@ -5,6 +5,10 @@ import Crumb from '~/components/breadcrumbs/crumb.vue';
 defineProps<{
   breadcrumbs: BreadcrumbType[];
 }>();
+
+const emit = defineEmits<{
+  (e: 'select-breadcrumb', nodeId: string): void;
+}>();
 </script>
 
 <template>
@@ -15,6 +19,7 @@ defineProps<{
       :anchor-id="breadcrumb.anchorId"
       :label="breadcrumb.label"
       :is-last="index === breadcrumbs.length - 1"
+      @select="(nodeId) => emit('select-breadcrumb', nodeId)"
     />
   </div>
 </template>
