@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BreadcrumbType } from '~/types';
+import type { BreadcrumbType } from '~/types/types';
 import Crumb from '~/components/breadcrumbs/crumb.vue';
 
 defineProps<{

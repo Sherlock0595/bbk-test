@@ -1,5 +1,5 @@
 import type { BbkRootRecordType } from '@api/bbk-service/requests/bbk-root-validator';
-import type { BbkChildrenRecordMapType, BbkRecordMapType } from '~/types';
+import type { BbkChildrenRecordMapType, BbkRecordMapType } from '~/types/types';
 import { useBbkClient } from '@api/bbk-service/client';
 import { parse, stringify } from 'zipson';
 

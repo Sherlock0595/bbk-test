@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { BbkRootRecordType } from '~~/api/bbk-service/requests/bbk-root-validator';
-import type { BreadcrumbType } from '~/types';
+import type { BreadcrumbType } from '~/types/types';
 import Breadcrumbs from '~/components/breadcrumbs/breadcrumbs.vue';
 
 defineProps<{

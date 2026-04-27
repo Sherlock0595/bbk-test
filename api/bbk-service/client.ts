@@ -1,4 +1,4 @@
-import type { ApiResponse } from '@/types';
+import type { ApiResponse } from '~/types/types';
 import { BbkRootValidator, type BbkRootRecordType } from '~~/api/bbk-service/requests/bbk-root-validator';
 import { safeParse } from 'valibot';
 import { useHttpClient } from '@api/request';

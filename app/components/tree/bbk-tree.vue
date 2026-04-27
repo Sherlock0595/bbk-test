@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BbkChildrenRecordMapType, BbkRecordMapType } from '~/types';
+import type { BbkChildrenRecordMapType, BbkRecordMapType } from '~/types/types';
 import type { BbkRootRecordType } from '~~/api/bbk-service/requests/bbk-root-validator';
 import BbkTreeNode from '~/components/tree/bbk-tree-node.vue';
 

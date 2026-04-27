@@ -1,6 +1,5 @@
 import type { BbkRootRecordType } from '~~/api/bbk-service/requests/bbk-root-validator';
 
-// FIXME: fix unkkonwn type
 export type ApiResponse<T> = { success: true; data: T } | { success: false; issues: unknown };
 
 // App types
