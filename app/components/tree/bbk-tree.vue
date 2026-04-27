@@ -56,16 +56,20 @@ const emitOpenNode = (node: BbkRootRecordType[number]) => {
 
       <transition
         enter-active-class="duration-300 ease-out"
-        enter-from-class="transform opacity-0"
-        enter-to-class="opacity-100"
+        enter-from-class="transform opacity-0 -translate-y-2"
+        enter-to-class="opacity-100 translate-y-0"
         leave-active-class="duration-200 ease-in"
-        leave-from-class="opacity-100"
-        leave-to-class="transform opacity-0"
+        leave-from-class="opacity-100 translate-y-0"
+        leave-to-class="transform opacity-0 -translate-y-2"
       >
         <template v-if="expandedNodes.has(node.id)">
-          <div v-if="loadingNodes.has(node.id)">Загрузка дочерних элементов...</div>
+          <div v-if="loadingNodes.has(node.id)" class="text-sm text-slate-500 italic py-2 px-3">
+            ⏳ Загрузка дочерних элементов...
+          </div>
 
-          <div v-else-if="(children.get(node.id)?.size ?? 0) == 0">Нет дочерних элементов</div>
+          <div v-else-if="(children.get(node.id)?.size ?? 0) == 0" class="text-sm text-slate-400 py-2 px-3">
+            ✓ Нет дочерних элементов
+          </div>
 
           <bbk-tree
             v-else

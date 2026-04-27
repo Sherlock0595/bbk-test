@@ -8,12 +8,13 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex gap-4">
+  <div class="flex items-center flex-wrap gap-1">
     <crumb
-      v-for="breadcrumb in breadcrumbs"
+      v-for="(breadcrumb, index) in breadcrumbs"
       :key="breadcrumb.anchorId"
       :anchor-id="breadcrumb.anchorId"
       :label="breadcrumb.label"
+      :is-last="index === breadcrumbs.length - 1"
     />
   </div>
 </template>
