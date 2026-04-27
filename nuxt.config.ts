@@ -1,14 +1,16 @@
 import { fileURLToPath } from 'node:url';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: false },
   modules: [
     '@pinia/nuxt',
-    '@nuxt/eslint',
     '@nuxtjs/stylelint-module',
     'pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/tailwindcss',
+    ...(isProd ? [] : ['@nuxt/eslint']),
   ],
   vite: {
     optimizeDeps: {
