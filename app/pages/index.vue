@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { BbkRootRecordType } from '~~/api/bbk-service/requests/bbk-root-validator';
-import type { BreadcrumbType } from '~/types';
 import { useBbkStore } from '@/stores/bbk-store';
 import BbkTree from '~/components/tree/bbk-tree.vue';
 import BbkDetails from '~/components/tree/bbk-details.vue';
+import TagsList from '~/components/lists/tags-list.vue';
 
 const bbkStore = useBbkStore();
 const breadcrumbStore = useBreadcrumbStore();
@@ -11,7 +11,8 @@ const breadcrumbStore = useBreadcrumbStore();
 await bbkStore.loadRootNodes();
 
 const detailedNode = ref<BbkRootRecordType[number]>();
-const formatPushedBreadcrumbs = computed<BreadcrumbType[]>(() =>
+const formattedTags = computed(() => Array.from(bbkStore.getSelectedNodes));
+const formatPushedBreadcrumbs = computed(() =>
   breadcrumbStore.getBreadcrumbs
     .map((node) => ({
       anchorId: node.id,
@@ -66,21 +67,8 @@ const formatPushedBreadcrumbs = computed<BreadcrumbType[]>(() =>
       </transition>
     </div>
 
-    <div v-if="bbkStore.getSelectedNodes.size > 0" class="mt-6">
-      <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
-        <h3 class="text-sm font-semibold text-slate-900 mb-3">
-          Выбранные элементы ({{ bbkStore.getSelectedNodes.size }})
-        </h3>
-        <div class="flex flex-wrap align-center gap-2 max-h-40 overflow-y-auto">
-          <div
-            v-for="nodeId of Array.from(bbkStore.getSelectedNodes)"
-            :key="nodeId"
-            class="text-sm text-slate-700 px-1 py-1 bg-blue-50 rounded border border-blue-200"
-          >
-            {{ nodeId }}
-          </div>
-        </div>
-      </div>
-    </div>
+    <tags-list v-if="formattedTags.length" class="mt-6" :tags="formattedTags">
+      <template #title> Выбранные узлы ({{ formattedTags.length }}) </template>
+    </tags-list>
   </div>
 </template>
